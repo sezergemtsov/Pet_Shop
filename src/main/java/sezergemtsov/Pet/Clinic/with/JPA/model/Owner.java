@@ -24,7 +24,7 @@ public class Owner implements PetShopEntity {
     @Column
     @NotBlank(message = "Phone number is mandatory")
     String phoneNumber;
-    @Column(nullable = true)
+    @Column
     String email;
     @OneToMany(mappedBy = "owner")
     List<Pet> pets;

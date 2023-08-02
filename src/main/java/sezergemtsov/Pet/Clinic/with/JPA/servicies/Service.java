@@ -182,7 +182,7 @@ public class Service {
      * @param <K> - Primary key class of this table/entity
      * @return - List of id
      */
-    private <T extends MyEntity, K> List<K> selectById(Class<T> c, Class<K> k) {
+    private <T extends PetShopEntity, K> List<K> selectById(Class<T> c, Class<K> k) {
         Class<?> keyType;
         Metamodel metamodel = entityManager.getMetamodel();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
