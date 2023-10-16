@@ -50,6 +50,12 @@ public class Service {
         owner.setPhoneNumber(phoneNumber);
         owners.save(owner);
     }
+    public void newOwner1(String name, String phoneNumber){
+        Owner owner = new Owner();
+        owner.setName(name);
+        owner.setPhoneNumber(phoneNumber);
+        owners.save(owner);
+    }
 
     /**
      * Method to build and save new Pet in DB. To create new pet the owner should be created first.

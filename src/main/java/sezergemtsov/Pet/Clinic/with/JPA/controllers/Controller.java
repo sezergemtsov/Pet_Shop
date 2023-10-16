@@ -1,9 +1,16 @@
 package sezergemtsov.Pet.Clinic.with.JPA.controllers;
 
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import sezergemtsov.Pet.Clinic.with.JPA.Customvalidator;
+import sezergemtsov.Pet.Clinic.with.JPA.model.OwnerModel;
+import sezergemtsov.Pet.Clinic.with.JPA.model.OwnerModel1;
 import sezergemtsov.Pet.Clinic.with.JPA.servicies.Service;
 
 import java.util.List;
@@ -14,6 +21,45 @@ import java.util.List;
 public class Controller {
 
     private final Service service;
+    private final Customvalidator customvalidator;
+
+    @InitBinder
+    private void initBinder(WebDataBinder binder) {
+        binder.setValidator(customvalidator);
+    }
+
+    @PostMapping("/owner")
+    public ResponseEntity<?> newOwner1(@RequestBody @Validated OwnerModel owner, Errors errors) {
+        try {
+            if(errors.getErrorCount()>0){
+                errors.getAllErrors().forEach(e-> System.out.println(e.getDefaultMessage()));
+            }
+            service.newOwner1(owner.getName(), owner.getPhoneNumber());
+            return ResponseEntity.status(HttpStatus.OK).body("success");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @PostMapping("/owner1")
+    public ResponseEntity<?> newOwner2(@RequestBody @Validated OwnerModel1 owner, Errors errors) {
+        try {
+            if(errors.getErrorCount()>0){
+                errors.getAllErrors().forEach(e-> System.out.println(e.getDefaultMessage()));
+                StringBuilder b = new StringBuilder();
+                errors.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).forEach(v-> {
+                    b.append(v);
+                    b.append('\n');
+                });
+                String result = b.toString();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+            } else {
+                service.newOwner1(owner.getName(), owner.getEmail());
+                return ResponseEntity.status(HttpStatus.OK).body("success");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
     @GetMapping("/")
     public String hello() {
@@ -22,7 +68,7 @@ public class Controller {
 
     @GetMapping("/owner")
     public void newOwner(@RequestParam("name") String name, @RequestParam("number") String number) {
-        service.newOwner(name, number);
+        service.newOwner1(name, number);
     }
 
     @GetMapping("/pet")

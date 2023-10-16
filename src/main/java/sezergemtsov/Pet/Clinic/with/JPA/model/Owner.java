@@ -2,9 +2,11 @@ package sezergemtsov.Pet.Clinic.with.JPA.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,12 +21,10 @@ public class Owner implements PetShopEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     @Column
-    @NotBlank(message = "Name is mandatory")
     String name;
     @Column
-    @NotBlank(message = "Phone number is mandatory")
     String phoneNumber;
-    @Column
+    @Column(columnDefinition = "text(50) default 'example@mail.com'")
     String email;
     @OneToMany(mappedBy = "owner")
     List<Pet> pets;
